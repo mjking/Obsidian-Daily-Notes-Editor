@@ -16,6 +16,7 @@ export interface FileManagerOptions {
     customRange?: { start: Date; end: Date } | null;
     app?: App;
     timeField?: TimeField;
+    hideFutureNotes?: boolean;
 }
 
 export class FileManager {
@@ -244,6 +245,11 @@ export class FileManager {
 
         this.filteredFiles = this.allFiles.filter((file) => {
             const fileDate = moment(file.basename, fileFormat);
+
+            // Check if we should hide future notes
+            if (this.options.hideFutureNotes && fileDate.isAfter(now, "day")) {
+                return false;
+            }
 
             return this.isDateInRange(fileDate, now);
         });
@@ -521,7 +527,7 @@ export class FileManager {
     public updateOptions(options: Partial<FileManagerOptions>): void {
         this.options = { ...this.options, ...options };
 
-        if (options.timeRange || options.customRange) {
+        if (options.timeRange || options.customRange || options.hideFutureNotes !== undefined) {
             this.filterFilesByRange();
         }
 
