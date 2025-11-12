@@ -40,20 +40,23 @@
         timeRange: selectedRange,
         customRange: customRange,
         app: plugin.app,
-        timeField: timeField
+        timeField: timeField,
+        hideFutureNotes: plugin.settings.hideFutureNotes
     } as FileManagerOptions;
 
-    $: if (fileManager && (selectedRange !== fileManager.options.timeRange || 
+    $: if (fileManager && (selectedRange !== fileManager.options.timeRange ||
                           customRange !== fileManager.options.customRange ||
                           selectionMode !== fileManager.options.mode ||
                           target !== fileManager.options.target ||
-                          timeField !== fileManager.options.timeField)) {
+                          timeField !== fileManager.options.timeField ||
+                          plugin.settings.hideFutureNotes !== fileManager.options.hideFutureNotes)) {
         fileManager.updateOptions({
             timeRange: selectedRange,
             customRange: customRange,
             mode: selectionMode,
             target: target,
-            timeField: timeField
+            timeField: timeField,
+            hideFutureNotes: plugin.settings.hideFutureNotes
         });
         
         // Reset rendered files and start filling viewport again

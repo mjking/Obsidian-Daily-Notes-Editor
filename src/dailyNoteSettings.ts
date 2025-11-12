@@ -4,6 +4,7 @@ import { App, debounce, PluginSettingTab, Setting, Modal } from "obsidian";
 export interface DailyNoteSettings {
     hideFrontmatter: boolean;
     hideBacklinks: boolean;
+    hideFutureNotes: boolean;
     createAndOpenOnStartup: boolean;
     useArrowUpOrDownToNavigate: boolean;
 
@@ -16,6 +17,7 @@ export interface DailyNoteSettings {
 export const DEFAULT_SETTINGS: DailyNoteSettings = {
     hideFrontmatter: false,
     hideBacklinks: false,
+    hideFutureNotes: false,
     createAndOpenOnStartup: false,
     useArrowUpOrDownToNavigate: false,
     preset: [],
@@ -89,6 +91,18 @@ export class DailyNoteSettingTab extends PluginSettingTab {
                             "daily-notes-hide-backlinks",
                             value
                         );
+                        this.applySettingsUpdate();
+                    })
+            );
+
+        new Setting(containerEl)
+            .setName("Hide future notes")
+            .setDesc("Hide daily notes with dates in the future")
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(settings.hideFutureNotes)
+                    .onChange(async (value) => {
+                        this.plugin.settings.hideFutureNotes = value;
                         this.applySettingsUpdate();
                     })
             );
