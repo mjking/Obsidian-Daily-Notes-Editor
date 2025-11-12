@@ -61,6 +61,16 @@ export class DailyNoteSettingTab extends PluginSettingTab {
 
         containerEl.empty();
 
+        // Add a heading for general settings
+        new Setting(containerEl).setName("General Settings").setHeading();
+
+        // Add information about hotkeys
+        const hotkeyInfo = containerEl.createDiv("setting-item");
+        hotkeyInfo.createDiv({ cls: "setting-item-info" }).createDiv({
+            text: "To set a hotkey for opening the Daily Notes Editor, go to Settings → Hotkeys and search for 'Open Daily Note Editor'.",
+            cls: "setting-item-description",
+        });
+
         new Setting(containerEl)
             .setName("Hide frontmatter")
             .setDesc("Hide frontmatter in daily notes")
@@ -104,6 +114,9 @@ export class DailyNoteSettingTab extends PluginSettingTab {
                     .onChange(async (value) => {
                         this.plugin.settings.hideFutureNotes = value;
                         this.applySettingsUpdate();
+
+                        // Refresh all open Daily Notes views to apply the filter
+                        this.plugin.refreshAllViews();
                     })
             );
 

@@ -187,10 +187,35 @@
         }
     }
 
+    export function refreshFiltering() {
+        // Update the fileManager options with the current settings
+        if (fileManager) {
+            fileManager.updateOptions({
+                timeRange: selectedRange,
+                customRange: customRange,
+                mode: selectionMode,
+                target: target,
+                timeField: timeField,
+                hideFutureNotes: plugin.settings.hideFutureNotes
+            });
+
+            // Reset rendered files and start filling viewport again
+            renderedFiles = [];
+            visibleNotes.clear();
+            filteredFiles = fileManager.getFilteredFiles();
+            hasMore = filteredFiles.length > 0;
+            firstLoaded = true;
+            startFillViewport();
+
+            // Update the title element with the new range information
+            updateTitleElement();
+        }
+    }
+
     export function tick() {
         // First check if we need to update for a new day
         check();
-        
+
         // Force a refresh of the view
         renderedFiles = renderedFiles;
     }

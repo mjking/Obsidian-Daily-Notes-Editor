@@ -328,6 +328,18 @@ export default class DailyNoteViewPlugin extends Plugin {
         await this.saveData(this.settings);
     }
 
+    public refreshAllViews(): void {
+        // Get all open Daily Notes views and refresh their filtering
+        const dailyNoteLeaves =
+            this.app.workspace.getLeavesOfType(DAILY_NOTE_VIEW_TYPE);
+        for (const leaf of dailyNoteLeaves) {
+            const view = leaf.view as DailyNoteView;
+            if (view && view.view) {
+                view.view.refreshFiltering();
+            }
+        }
+    }
+
     private async checkDayChange(): Promise<void> {
         const currentDay = moment().format("YYYY-MM-DD");
 
